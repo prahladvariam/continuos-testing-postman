@@ -1,0 +1,20 @@
+{
+  "name": "continuos-testing-postman",
+  "version": "1.0.0",
+  "description": "Continuos testing in postman",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve-json1": "json-server --watch db1.json --port 4000",
+    "serve-json2": "json-server --watch db2.json --port 4001",
+    "serve-json3": "json-server --watch db3.json --port 4002"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "json-server": "^0.17.0"
+  },
+  "devDependencies": {
+    "newman": "^5.3.2"
+  }
+}
