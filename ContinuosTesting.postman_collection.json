@@ -7,115 +7,436 @@
 	},
 	"item": [
 		{
-			"name": "API1 request",
-			"event": [
+			"name": "Sqs (auth)",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"API1 Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"const jsonData = pm.response.json();\r",
-							"const obj = Object.assign({}, ...jsonData)\r",
-							"pm.environment.set(\"contactName\", obj.name);"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:4000/contacts?id=20",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"contacts"
-					],
-					"query": [
+					"name": "API1 request",
+					"event": [
 						{
-							"key": "id",
-							"value": "20"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "API2 request",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"API2 Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:4001/posts",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4001",
-					"path": [
-						"posts"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "API3 request",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"API3 Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:4002/users?name={{contactName}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4002",
-					"path": [
-						"users"
-					],
-					"query": [
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"API1 Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const jsonData = pm.response.json();\r",
+									"const obj = Object.assign({}, ...jsonData)\r",
+									"pm.environment.set(\"contactName\", obj.name);\r",
+									"postman.setNextRequest(\"Send message Copy\");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
 						{
-							"key": "name",
-							"value": "{{contactName}}"
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"id\", 20);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
+					],
+					"request": {
+						"auth": {
+							"type": "awsv4",
+							"awsv4": [
+								{
+									"key": "secretKey",
+									"value": "LGdULbM9pGD4fXVFW6ZX5w8bqp/iSTXdHWzyvNWx",
+									"type": "string"
+								},
+								{
+									"key": "accessKey",
+									"value": "AKIA37SHTYZAD5I3N353",
+									"type": "string"
+								},
+								{
+									"key": "service",
+									"value": "sqs",
+									"type": "string"
+								},
+								{
+									"key": "region",
+									"value": "us-east-1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/contacts?id={{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "API2 request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"API2 Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"postman.setNextRequest(\"Receive message Copy\");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "awsv4",
+							"awsv4": [
+								{
+									"key": "secretKey",
+									"value": "LGdULbM9pGD4fXVFW6ZX5w8bqp/iSTXdHWzyvNWx",
+									"type": "string"
+								},
+								{
+									"key": "accessKey",
+									"value": "AKIA37SHTYZAD5I3N353",
+									"type": "string"
+								},
+								{
+									"key": "service",
+									"value": "sqs",
+									"type": "string"
+								},
+								{
+									"key": "region",
+									"value": "us-east-1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4001/posts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4001",
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send message Copy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"postman.setNextRequest(\"API2 request\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "awsv4",
+							"awsv4": [
+								{
+									"key": "secretKey",
+									"value": "LGdULbM9pGD4fXVFW6ZX5w8bqp/iSTXdHWzyvNWx",
+									"type": "string"
+								},
+								{
+									"key": "accessKey",
+									"value": "AKIA37SHTYZAD5I3N353",
+									"type": "string"
+								},
+								{
+									"key": "service",
+									"value": "sqs",
+									"type": "string"
+								},
+								{
+									"key": "region",
+									"value": "us-east-1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{sqsUrl}}?Action=SendMessage&MessageBody={{contactName}}",
+							"host": [
+								"{{sqsUrl}}"
+							],
+							"query": [
+								{
+									"key": "Action",
+									"value": "SendMessage"
+								},
+								{
+									"key": "MessageBody",
+									"value": "{{contactName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send message (using POST) Copy",
+					"request": {
+						"auth": {
+							"type": "awsv4",
+							"awsv4": [
+								{
+									"key": "secretKey",
+									"value": "LGdULbM9pGD4fXVFW6ZX5w8bqp/iSTXdHWzyvNWx",
+									"type": "string"
+								},
+								{
+									"key": "accessKey",
+									"value": "AKIA37SHTYZAD5I3N353",
+									"type": "string"
+								},
+								{
+									"key": "service",
+									"value": "sqs",
+									"type": "string"
+								},
+								{
+									"key": "region",
+									"value": "us-east-1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "Action",
+									"value": "SendMessage",
+									"type": "text"
+								},
+								{
+									"key": "MessageBody",
+									"value": "{{contactName}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{sqsUrl}}",
+							"host": [
+								"{{sqsUrl}}"
+							]
+						},
+						"description": "This has the same effect as using GET, but POST is more \"correct\" way of creating resources."
+					},
+					"response": []
+				},
+				{
+					"name": "Receive message Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const $ = cheerio.load(pm.response.text());\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"RecievedMessage\", $(\"Body\").text());\r",
+									"postman.setNextRequest(\"API3 request\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "awsv4",
+							"awsv4": [
+								{
+									"key": "secretKey",
+									"value": "LGdULbM9pGD4fXVFW6ZX5w8bqp/iSTXdHWzyvNWx",
+									"type": "string"
+								},
+								{
+									"key": "accessKey",
+									"value": "AKIA37SHTYZAD5I3N353",
+									"type": "string"
+								},
+								{
+									"key": "service",
+									"value": "sqs",
+									"type": "string"
+								},
+								{
+									"key": "region",
+									"value": "us-east-1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{sqsUrl}}?Action=ReceiveMessage",
+							"host": [
+								"{{sqsUrl}}"
+							],
+							"query": [
+								{
+									"key": "Action",
+									"value": "ReceiveMessage"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "API3 request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"API3 Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"postman.setNextRequest(null);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "awsv4",
+							"awsv4": [
+								{
+									"key": "secretKey",
+									"value": "LGdULbM9pGD4fXVFW6ZX5w8bqp/iSTXdHWzyvNWx",
+									"type": "string"
+								},
+								{
+									"key": "accessKey",
+									"value": "AKIA37SHTYZAD5I3N353",
+									"type": "string"
+								},
+								{
+									"key": "service",
+									"value": "sqs",
+									"type": "string"
+								},
+								{
+									"key": "region",
+									"value": "us-east-1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4002/users?name={{RecievedMessage}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4002",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{RecievedMessage}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saved API1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"API1 Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"postman.setNextRequest(\"API2 request\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/contacts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
